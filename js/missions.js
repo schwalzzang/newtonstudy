@@ -83,10 +83,12 @@ export const MISSIONS = [
         } else if (st.braking) {
           Body.setVelocity(bus, { x: 0, y: 0 });
         }
+        // 승객이 버스 안에서 앞으로 얼마나 밀려났는지 매 순간 갱신 —
+        // 사용자가 '결과 보기'로 일찍 끝내도 측정값이 최신이도록.
+        data.shift = Math.max(0, (pas.position.x - bus.position.x) - offset0);
         if (st.braking && Math.abs(pas.velocity.x) < 0.15 && Math.abs(bus.velocity.x) < 0.1) st.calm++;
         else st.calm = 0;
         if (st.calm > 35 || pas.position.y > H || pas.position.x > 950 || sim.time > 9) {
-          data.shift = Math.max(0, (pas.position.x - bus.position.x) - offset0);
           sim.finish('done');
         }
       },
